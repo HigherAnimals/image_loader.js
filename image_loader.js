@@ -60,7 +60,11 @@ ImageLoader.prototype._startImage = function (imagePath, index) {
 
   image = new Image();
   this._images.push(image);
-  image.onload = this._check.bind(this, image, index);
+  image.onload = (function (image_loader) {
+    return function () {
+      image_loader._check(image, index);
+    };
+  })(this);
   if (this._errback) image.onerror = this._errback;
   image.src = imagePath;
 };
